@@ -1,0 +1,10 @@
+Flask
+SQLAlchemy
+Flask-Login
+Flask-WTF
+WTForms
+Werkzeug
+Flask-Migrate
+Flask-Script
+Flask-Mail
+mysql-connector-python
