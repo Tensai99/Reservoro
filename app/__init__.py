@@ -18,4 +18,4 @@ login_manager.init_app(app)
 
 mail = Mail(app)
 
-from app import routes, models, utils
+from app import routes, models

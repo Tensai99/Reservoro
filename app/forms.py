@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SelectField, IntegerField
-from wtforms.validators import InputRequired, DataRequired, EqualTo, Length, ValidationError, NumberRange
+from wtforms.validators import InputRequired, DataRequired, Email, EqualTo, Length, ValidationError, NumberRange
 from app.models import User, RestaurantTable
 
 
@@ -12,9 +12,10 @@ class LoginForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
+    phone_number = StringField('Phone Number', validators=[DataRequired()])
     submit = SubmitField('Sign Up')
 
     def validate_username(self, field):
@@ -24,6 +25,11 @@ class SignupForm(FlaskForm):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError('Email is already registered.')
+
+    def validate_phone_number(self, field):
+        if field.data:  # Check if phone number is provided
+            # Add any additional phone number validation if needed
+            pass
 
 
 class AddTableForm(FlaskForm):
@@ -42,7 +48,7 @@ class ReservationForm(FlaskForm):
         self.table_id.choices = [(table.table_id, str(table.table_id)) for table in RestaurantTable.query.filter_by(status='Available').all()]
 
 class ProfileForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=4, max=100)])
-    email = StringField('Email', validators=[DataRequired(), Length(min=4, max=100)])
-    whatsapp_number = StringField('WhatsApp Number', validators=[Length(max=20)])
-    submit = SubmitField('Update Profile')
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    phone_number = StringField('Phone Number')
+    submit = SubmitField('Save Changes')

@@ -8,3 +8,6 @@ Flask-Migrate
 Flask-Script
 Flask-Mail
 mysql-connector-python
+phonenumbers
+email_validator
+requests

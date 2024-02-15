@@ -4,6 +4,7 @@ from app import app, db, login_manager
 from app.forms import LoginForm, SignupForm, AddTableForm, ReservationForm, ProfileForm
 from app.models import User, RestaurantTable, Reservation
 from datetime import datetime, date
+from app.mail import send_email
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -30,23 +31,43 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('admin_panel')) if current_user.is_admin else redirect(url_for('make_reservation'))
     form = SignupForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, is_admin=False)
+        user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        if form.phone_number.data:
+            try:
+                user.set_phone_number(form.phone_number.data)
+            except ValueError as e:
+                flash(str(e), 'danger')
+                return redirect(url_for('signup'))
         db.session.add(user)
         db.session.commit()
-        login_user(user)
-        return redirect(url_for('login'))
-    return render_template('signup.html', form=form)
+        flash('Congratulations, you are now a registered user!', 'success')
+        return redirect(url_for('make_reservation'))
+    return render_template('signup.html', title='Sign Up', form=form)
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/service')
+def service():
+    return render_template('service.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
 
 @app.route('/admin', methods=['GET', 'POST'])
 @login_required
@@ -153,7 +174,12 @@ def update_reservation_status():
 
     return redirect(url_for('admin_panel'))
 
-
+def get_admin_email():
+    admin = User.query.filter_by(is_admin=True).first()
+    if admin:
+        return admin.email
+    else:
+        return None
 
 @app.route('/make_reservation', methods=['GET', 'POST'])
 @login_required
@@ -172,7 +198,7 @@ def make_reservation():
         table_id = int(form.table_id.data)
         number_of_guests = form.number_of_guests.data
         occasion = form.occasion.data
-        reservation_datetime = datetime.strptime(request.form['reservation_datetime'], '%Y-%m-%dT%H:%M')
+        reservation_datetime = datetime.strptime(request.form['reservation_datetime'], '%Y-%m-%d %H:%M')
 
         table = RestaurantTable.query.get(table_id)
         if table:
@@ -196,6 +222,16 @@ def make_reservation():
                     db.session.add(reservation)
                     db.session.commit()
 
+                    # Send confirmation email
+                    sender = get_admin_email()
+                    if sender:
+                        recipient = current_user.email
+                        subject = "Reservation Confirmation"
+                        body = f"Your reservation details:\nTable ID: {table_id}\nNumber of Guests: {number_of_guests}\nOccasion: {occasion}\nDate: {reservation_datetime.date()}\nTime: {reservation_datetime.time()}"
+                        send_email(sender, recipient, subject, body)
+                    else:
+                        flash('Failed to send confirmation email. Admin email not found.', 'error')
+
                     return redirect(url_for('make_reservation'))
             else:
                 table.status = 'Reserved'
@@ -211,6 +247,16 @@ def make_reservation():
                 )
                 db.session.add(reservation)
                 db.session.commit()
+
+                # Send confirmation email
+                sender = get_admin_email()
+                if sender:
+                    recipient = current_user.email
+                    subject = "Reservation Confirmation"
+                    body = f"Your reservation details:\nTable ID: {table_id}\nNumber of Guests: {number_of_guests}\nOccasion: {occasion}\nDate: {reservation_datetime.date()}\nTime: {reservation_datetime.time()}"
+                    send_email(sender, recipient, subject, body)
+                else:
+                    flash('Failed to send confirmation email. Admin email not found.', 'error')
 
                 return redirect(url_for('make_reservation'))
         else:
@@ -265,21 +311,12 @@ def check_availability():
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    form = ProfileForm()
-
+    form = ProfileForm(obj=current_user)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
-        current_user.whatsapp_number = form.whatsapp_number.data
-
+        current_user.phone_number = form.phone_number.data
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('profile'))
-
-    elif request.method == 'GET':
-        # Pre-fill the form with the user's current information
-        form.username.data = current_user.username
-        form.email.data = current_user.email
-        form.whatsapp_number.data = current_user.whatsapp_number
-
-    return render_template('profile.html', form=form)
+    return render_template('profile.html', title='Profile', form=form)

@@ -1,6 +1,7 @@
 from app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+import phonenumbers
 
 class User(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -8,9 +9,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-    
-    # Add a field for WhatsApp numbers
-    whatsapp_number = db.Column(db.String(20), unique=True, nullable=True)
+    phone_number = db.Column(db.String(20), unique=True, nullable=True)  
 
     reservations = db.relationship('Reservation', back_populates='user', lazy=True)
 
@@ -25,6 +24,16 @@ class User(UserMixin, db.Model):
 
     def get_id(self):
         return str(self.user_id)
+
+    def validate_phone_number(self, phone):
+        # No country code validation needed
+        return phone
+
+    def set_phone_number(self, phone):
+        try:
+            self.phone_number = self.validate_phone_number(phone)
+        except ValueError as e:
+            raise ValueError(str(e))
 
 class RestaurantTable(db.Model):
     table_id = db.Column(db.Integer, primary_key=True)

@@ -4,8 +4,4 @@ class Config:
     SECRET_KEY = os.urandom(24)
     SQLALCHEMY_DATABASE_URI ='mysql://root:root@localhost/restaurant'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    MAIL_SERVER = 'smtp.gmail.com'
-    MAIL_PORT = 587
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = 'your-email@gmail.com'
-    MAIL_PASSWORD = 'your-email-password'
+    POSTMAN_MAILER_API_KEY = "PMAK-65cb6a918a25cc0001fb39ec-3fd8966aa5b3debfe243b74991582008d9"

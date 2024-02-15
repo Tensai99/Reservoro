@@ -92,7 +92,15 @@
         })
     });
 
-
+    flatpickr("#reservation_datetime", {
+        enableTime: true,
+        dateFormat: "Y-m-d H:i",
+        altInput: true,
+        altFormat: "F j, Y H:i",
+        time_24hr: true,
+        // Add any other configuration options as needed
+    });
+    
     // Testimonials carousel
     $(".testimonial-carousel").owlCarousel({
         autoplay: true,

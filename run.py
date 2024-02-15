@@ -12,6 +12,7 @@ with app.app_context():
         # Create the admin user
         admin_user = User(username='admin', email='eimtingwi@gmail.com', is_admin=True)
         admin_user.set_password('vanawsum')
+        admin_user.set_phone_number('+265996393991')  # Setting admin's phone number with country code
         db.session.add(admin_user)
         db.session.commit()
 
