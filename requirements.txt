@@ -7,6 +7,7 @@ Werkzeug
 Flask-Migrate
 Flask-Script
 Flask-Mail
+mysqlclient
 mysql-connector-python
 phonenumbers
 email_validator
