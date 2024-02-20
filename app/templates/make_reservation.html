@@ -96,6 +96,15 @@
 
 <!-- Reservation Start -->
         <div class="container-xxl py-5 px-0 wow fadeInUp" data-wow-delay="0.1s">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                    {% for message in messages %}
+                        <span class="flash-message">{{ message }}</span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
             <div class="row g-0">
                 {% block content %}
                 <div class="col-md-6">
@@ -136,15 +145,7 @@
 
                     <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
                         <h5 class="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
-                        {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        <div class="flash-messages">
-                        {% for message in messages %}
-                            <span class="flash-message">{{ message }}</span>
-                        {% endfor %}
-                        </div>
-                    {% endif %}
-                    {% endwith %}
+                    
                         <h1 class="text-white mb-4">Book A Table Online</h1>
                         <form method="POST" action="{{ url_for('make_reservation') }}">
                             {{ form.csrf_token }}

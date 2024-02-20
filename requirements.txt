@@ -11,4 +11,7 @@ mysqlclient
 mysql-connector-python
 phonenumbers
 email_validator
-requests
+google-api-python-client
+google-auth
+google-auth-httplib2
+google-auth-oauthlib

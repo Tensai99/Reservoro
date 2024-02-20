@@ -4,7 +4,9 @@ from app import app, db, login_manager
 from app.forms import LoginForm, SignupForm, AddTableForm, ReservationForm, ProfileForm
 from app.models import User, RestaurantTable, Reservation
 from datetime import datetime, date
-from app.mail import send_email
+from google.oauth2 import service_account
+import googleapiclient.discovery
+import base64
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -174,12 +176,32 @@ def update_reservation_status():
 
     return redirect(url_for('admin_panel'))
 
-def get_admin_email():
-    admin = User.query.filter_by(is_admin=True).first()
-    if admin:
-        return admin.email
-    else:
-        return None
+# Load service account credentials
+credentials = service_account.Credentials.from_service_account_file(
+    'app/reservoro-2a7952c8e0e3.json',
+    scopes=['https://www.googleapis.com/auth/gmail.send']
+)
+
+# Function to send confirmation email using Gmail API
+def send_confirmation_email(user_email, reservation_details):
+    # Create Gmail API client
+    service = googleapiclient.discovery.build('gmail', 'v1', credentials=credentials)
+
+    # Prepare email content
+    message = f"Subject: Reservation Confirmation\n\nThank you for your reservation!\n\nReservation Details:\n{reservation_details}"
+
+    # Encode the message
+    raw_message = base64.urlsafe_b64encode(message.encode()).decode()
+
+    # Send email
+    try:
+        sent_message = service.users().messages().send(
+            userId='me',
+            body={'raw': raw_message}
+        ).execute()
+        return sent_message
+    except Exception as e:
+        return str(e)
 
 @app.route('/make_reservation', methods=['GET', 'POST'])
 @login_required
@@ -223,16 +245,13 @@ def make_reservation():
                     db.session.commit()
 
                     # Send confirmation email
-                    sender = get_admin_email()
-                    if sender:
-                        recipient = current_user.email
-                        subject = "Reservation Confirmation"
-                        body = f"Your reservation details:\nTable ID: {table_id}\nNumber of Guests: {number_of_guests}\nOccasion: {occasion}\nDate: {reservation_datetime.date()}\nTime: {reservation_datetime.time()}"
-                        send_email(sender, recipient, subject, body)
-                    else:
-                        flash('Failed to send confirmation email. Admin email not found.', 'error')
-
-                    return redirect(url_for('make_reservation'))
+                    try:
+                        send_confirmation_email(current_user.email, reservation)
+                        flash('Reservation made successfully. Confirmation email sent.', 'success')
+                        return redirect(url_for('make_reservation'))
+                    except Exception as e:
+                        flash(f'Error sending confirmation email: {str(e)}', 'danger')
+                        return redirect(url_for('make_reservation'))
             else:
                 table.status = 'Reserved'
                 db.session.commit()
@@ -249,16 +268,13 @@ def make_reservation():
                 db.session.commit()
 
                 # Send confirmation email
-                sender = get_admin_email()
-                if sender:
-                    recipient = current_user.email
-                    subject = "Reservation Confirmation"
-                    body = f"Your reservation details:\nTable ID: {table_id}\nNumber of Guests: {number_of_guests}\nOccasion: {occasion}\nDate: {reservation_datetime.date()}\nTime: {reservation_datetime.time()}"
-                    send_email(sender, recipient, subject, body)
-                else:
-                    flash('Failed to send confirmation email. Admin email not found.', 'error')
-
-                return redirect(url_for('make_reservation'))
+                try:
+                    send_confirmation_email(current_user.email, reservation)
+                    flash('Reservation made successfully. Confirmation email sent.', 'success')
+                    return redirect(url_for('make_reservation'))
+                except Exception as e:
+                    flash(f'Error sending confirmation email: {str(e)}', 'danger')
+                    return redirect(url_for('make_reservation'))
         else:
             flash('Table not found.', 'danger')
 
