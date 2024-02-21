@@ -8,11 +8,10 @@
 
 - [Introduction](#Introduction)
 - [Intallation](#Installation)
-- [Usage](#rUsage)
-- [Contribution](#contribution)
-- [Support](#support)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+- [Usage](#Usage)
+- [Contribution](#Contribution)
+- [Related Projects](#Related Projects)
+- [Licensing](#Licensing)
 
 </details>
 
@@ -75,7 +74,7 @@ Please follow these steps for Installation:
 
     *   You can easily manage your reservations through your Reservoro account. View, modify, or cancel your bookings as needed. If you have any changes or special requests, you can communicate directly with the restaurant through the messaging feature in your reservation.
 
-## Contribution
+### Contribution
 
 We welcome contributions from the community! If you'd like to contribute to Reservoro , please follow these guidelines:
 
@@ -85,7 +84,7 @@ We welcome contributions from the community! If you'd like to contribute to Rese
 3. Push to the branch: git push origin feature/your-feature
 4. Submit a pull request
 
-## Related Projects
+### Related Projects
 
 Check out these related projects:
 
@@ -93,7 +92,7 @@ Check out these related projects:
 - [Bookatable](https://www.bookatable.com/)
 - [Resy](https://resy.com/)
 
-## License
+### Licensing
 
 This project is licensed under the **MIT license**. Feel free to edit and distribute this template as you like.
 
