@@ -6,12 +6,12 @@
 <details open="open">
 <summary>Table of Contents</summary>
 
-- [Introduction](#Introduction)
-- [Intallation](#Installation)
-- [Usage](#Usage)
-- [Contribution](#Contribution)
-- [Related Projects](#Related Projects)
-- [Licensing](#Licensing)
+- [Introduction](#introduction)
+- [Intallation](#installation)
+- [Usage](#usage)
+- [Contribution](#contribution)
+- [Related_Projects](#related_projects)
+- [Licensing](#licensing)
 
 </details>
 
