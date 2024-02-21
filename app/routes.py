@@ -100,26 +100,6 @@ def admin_panel():
         return render_template('error.html', error_message='An error occurred. Please try again later.')
 
 
-
-"""@app.route('/admin/add_table', methods=['POST'])
-@login_required
-def add_table():
-    if not current_user.is_admin:
-        return redirect(url_for('make_reservation'))
-
-    form = AddTableForm()
-    if form.validate_on_submit():
-        status = form.status.data
-        table = RestaurantTable(status=status)
-        db.session.add(table)
-        db.session.commit()
-        flash('Table added successfully!', 'success')
-    else:
-        flash('Invalid input!', 'error')
-
-    return redirect(url_for('admin_panel'))
-"""
-
 @app.route('/update_table_status/<int:table_id>/<string:new_status>', methods=['POST'])
 @login_required
 def update_table_status(table_id, new_status):
