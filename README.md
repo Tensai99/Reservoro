@@ -109,4 +109,4 @@ Role: Project Manager and Full Stack Developer
 Reasoning:
 The chosen role of Project Manager and Full Stack Developer is based on the understanding that a single individual will be responsible for overseeing the entire project lifecycle, from conceptualization to implementation. This streamlined approach ensures quick decision-making, efficient communication, and a seamless integration of both the front-end and back-end components of the Lost and Found Platform. This role combines leadership and technical skills, allowing for a comprehensive and cohesive development process
 
-![Reservoro Screenshot](app/static/img/reservoro.png)
+![Reservoro Screenshot](app/static/img/Reservoro.png)
