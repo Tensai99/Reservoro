@@ -1,18 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Reservation</title>
+    <style>
+        /* Your email styles here */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #007bff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .reservation-details {
+            margin-top: 20px;
+        }
+        .detail {
+            margin-bottom: 10px;
+        }
+        .detail label {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <p>Hello Admin,</p>
-    <p>A new reservation has been made:</p>
-    <ul>
-        <li>User: {{ user.username }}</li>
-        <li>Phone Number: {{ user.phone_number }}</li>
-        <li>Date: {{ reservation.date }}</li>
-        <li>Time: {{ reservation.time }}</li>
-        <li>Number of Guests: {{ reservation.number_of_guests }}</li>
-        <li>Occasion: {{ reservation.occasion }}</li>
-    </ul>
+    <div class="container">
+        <h1>RESERVORO</h1>
+        <p>Dear Admin,</p>
+        <p>A new reservation has been made:</p>
+        <div class="reservation-details">
+            <div class="detail">
+                <label>User:</label>
+                <span>{{ user.username }}</span>
+            </div>
+            <div class="detail">
+                <label>Email:</label>
+                <span>{{ user.email }}</span>
+            </div>
+            <div class="detail">
+                <label>Phone Number:</label>
+                <span>{{ user.phone_number }}</span>
+            </div>
+            <div class="detail">
+                <label>Date:</label>
+                <span>{{ reservation.date }}</span>
+            </div>
+            <div class="detail">
+                <label>Time:</label>
+                <span>{{ reservation.time }}</span>
+            </div>
+            <div class="detail">
+                <label>Number of Guests:</label>
+                <span>{{ reservation.number_of_guests }}</span>
+            </div>
+            <div class="detail">
+                <label>Occasion:</label>
+                <span>{{ reservation.occasion }}</span>
+            </div>
+            <div class="detail">
+                <label>Table ID:</label>
+                <span>{{ reservation.table_id }}</span>
+            </div>
+        </div>
+        <p>Please take appropriate action.</p>
+        <p>Best regards,<br>Reservoro</p>
+    </div>
 </body>
 </html>

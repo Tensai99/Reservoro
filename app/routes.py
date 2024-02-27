@@ -21,13 +21,15 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('admin_panel')) if current_user.is_admin else redirect(url_for('make_reservation'))
+    
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.find_by_email(form.email.data)
         if user and user.check_password(form.password.data):
-            login_user(user)
+            login_user(user, remember=form.remember.data)  # Set remember parameter based on form input
             return redirect(url_for('admin_panel')) if user.is_admin else redirect(url_for('make_reservation'))
-        flash('Invalid username or password', 'danger')  # Add flash message for invalid login
+        flash('Invalid email or password', 'danger')  # Updated flash message for invalid login
+    
     return render_template('login.html', form=form)
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -197,7 +199,7 @@ def send_confirmation_email(user, admin_email, reservation):
     else:
         app.logger.error(f"Failed to send email notification to admin. Error: {response_admin}")
 
-# Modify your route function to pass admin email to send_confirmation_email
+# Make a reservation route
 @app.route('/make_reservation', methods=['GET', 'POST'])
 @login_required
 def make_reservation():
@@ -216,6 +218,10 @@ def make_reservation():
         number_of_guests = form.number_of_guests.data
         occasion = form.occasion.data
         reservation_datetime = datetime.strptime(request.form['reservation_datetime'], '%Y-%m-%d %H:%M')
+
+        if reservation_datetime.date() < current_date or (reservation_datetime.date() == current_date and reservation_datetime.time() < datetime.now().time()):
+            flash('Cannot make reservations for past dates or times.', 'danger')
+            return redirect(url_for('make_reservation'))
 
         table = RestaurantTable.query.get(table_id)
         if table:
@@ -294,6 +300,11 @@ def cancel_reservation(reservation_id):
             # Delete the reservation from the database
             db.session.delete(reservation)
             db.session.commit()
+            
+            # Send cancellation notification email to admin
+            admin_email = User.query.filter_by(is_admin=True).first().email
+            send_cancellation_notification(current_user, admin_email, reservation)
+            
             flash('Reservation canceled successfully.', 'success')
         else:
             flash('You are not authorized to cancel this reservation.', 'error')
@@ -301,6 +312,31 @@ def cancel_reservation(reservation_id):
         flash('Reservation not found.', 'error')
     
     return redirect(url_for('make_reservation'))
+
+
+def send_cancellation_notification(user, admin_email, reservation):
+    # Initialize Postmark client with your API token
+    client = PostmarkClient(server_token='0df544a6-d14a-4082-9819-f7f962f6887a')
+
+    # Compose email content for admin
+    admin_email_content = render_template('cancellation_notification_email.html',
+                                         user=user,
+                                         reservation=reservation)
+
+    # Send email to admin
+    response_admin = client.emails.send(
+        From='reservoro@tensaiverse.tech',
+        To=admin_email,
+        Subject='Reservation Cancellation',
+        HtmlBody=admin_email_content
+    )
+
+    # Check response status
+    if response_admin.get('ErrorCode') is None:
+        app.logger.info(f"Cancellation notification sent to admin")
+    else:
+        app.logger.error(f"Failed to send cancellation notification to admin. Error: {response_admin}")
+
 
 @app.route('/check_availability', methods=['POST'])
 def check_availability():

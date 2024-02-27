@@ -31,7 +31,10 @@ class User(UserMixin, db.Model):
             raise ValueError("Invalid phone number format. It should start with a '+' followed by country code and then the phone number.")
         
         self.phone_number = phone
-
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
+    
 class RestaurantTable(db.Model):
     table_id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String(20), default='Available')

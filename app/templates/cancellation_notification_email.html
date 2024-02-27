@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation Confirmation</title>
+    <title>Reservation Cancellation</title>
     <style>
         /* Your email styles here */
         body {
@@ -18,12 +18,8 @@
             border-radius: 5px;
             background-color: #f9f9f9;
         }
-        h1 {
-            color: #007bff;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        p {
-            margin-bottom: 10px;
+        h2 {
+            color: #333;
         }
         .reservation-details {
             margin-top: 20px;
@@ -38,10 +34,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>RESERVORO</h1>
-        <p>Dear {{ user.username }},</p>
-        <p>Your reservation details:</p>
+        <h2>Reservation Cancellation Notification</h2>
         <div class="reservation-details">
+            <div class="detail">
+                <label>User:</label>
+                <span>{{ user.username }}</span>
+            </div>
+            <div class="detail">
+                <label>Email:</label>
+                <span>{{ user.email }}</span>
+            </div>
+            <div class="detail">
+                <label>Phone Number:</label>
+                <span>{{ user.phone_number }}</span>
+            </div>
             <div class="detail">
                 <label>Date:</label>
                 <span>{{ reservation.date }}</span>
@@ -58,9 +64,11 @@
                 <label>Occasion:</label>
                 <span>{{ reservation.occasion }}</span>
             </div>
+            <div class="detail">
+                <label>Table ID:</label>
+                <span>{{ reservation.table_id }}</span>
+            </div>
         </div>
-        <p>Thank you for choosing our restaurant.</p>
-        <p>Best regards,<br>Reservoro</p>
     </div>
 </body>
 </html>

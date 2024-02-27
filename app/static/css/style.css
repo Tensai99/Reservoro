@@ -562,3 +562,42 @@
     height: 100%;
     background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
 }
+
+/* Flash messages */
+.flash-messages {
+    position: fixed;
+    top: 50px; /* 50px away from the top */
+    left: 0;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: orange;
+    color: white; /* White text color */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for 3D effect */
+    transition: transform 0.3s ease-in-out;
+    z-index: 9999; /* Ensure flash message appears on top */
+}
+
+.flash-message {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Add animation for flashing effect */
+@keyframes flash-animation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Apply animation to flash messages */
+.flash-message {
+    animation: flash-animation 1.5s ease-in-out;
+}

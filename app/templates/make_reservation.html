@@ -111,42 +111,77 @@
             {% endwith %}
             <div class="row g-0">
                 {% block content %}
-                <div class="col-md-6">
-                    <div class="table-list">
-                        <h3>Available Tables:</h3>
-                        {% if tables %}
-                            <div class="row">
+                <div class="col-md-4">
+                    <div class="container-block mb-4">
+                        <div class="table-list">
+                            <h3>Reserved Tables:</h3>
+                            {% if tables %}
                                 {% for table in tables %}
-                                    <div class="col-md-6` mb-4">
-                                        <div class="table-item border rounded p-3 custom-shadow">
-                                            <div class="table-info">
-                                                <span class="table-label">Table:</span>
-                                                <span class="table-value">{{ table.table_id }}</span>
-                                            </div>
-                                            <div class="table-info">
-                                                <span class="table-label">Status:</span>
-                                                <span class="table-value">{{ table.status }}</span>
-                                            </div>
-                                            {% if table.status == 'Reserved' %}
-                                                <div class="table-info">
-                                                    <span class="table-label">Date Reserved:</span>
-                                                    <span class="table-value">{{ table.reservations[0].date }}</span>
+                                    {% if table.status == 'Reserved' %}
+                                        <div class="row mb-4">
+                                            <div class="col-md-12">
+                                                <div class="table-item border rounded p-3 custom-shadow">
+                                                    <div class="table-info">
+                                                        <span class="table-label">Table:</span>
+                                                        <span class="table-value">{{ table.table_id }}</span>
+                                                    </div>
+                                                    <div class="table-info">
+                                                        <span class="table-label">Status:</span>
+                                                        <span class="table-value">{{ table.status }}</span>
+                                                    </div>
+                                                    {% if table.reservations %}
+                                                        <h4>Reservation Details:</h4>
+                                                        {% for reservation in table.reservations %}
+                                                            <div class="reservation-info">
+                                                                <span class="reservation-label">Date:</span>
+                                                                <span class="reservation-value">{{ reservation.date }}</span>
+                                                                <span class="reservation-label">Time:</span>
+                                                                <span class="reservation-value">{{ reservation.time }}</span>
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% endif %}
                                                 </div>
-                                                <div class="table-info">
-                                                    <span class="table-label">Time Reserved:</span>
-                                                    <span class="table-value">{{ table.reservations[0].time }}</span>
-                                                </div>
-                                            {% endif %}
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 {% endfor %}
-                            </div>
-                        {% else %}
-                            <p>No tables available.</p>
-                        {% endif %}
-                    </div>                
+                            {% else %}
+                                <p>No reserved tables.</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 d-flex align-items-center">
+                
+                <div class="col-md-4">
+                    <div class="container-block mb-4">
+                        <div class="table-list">
+                            <h3>Available Tables:</h3>
+                            {% if tables %}
+                                {% for table in tables %}
+                                    {% if table.status == 'Available' %}
+                                        <div class="row mb-4">
+                                            <div class="col-md-12">
+                                                <div class="table-item border rounded p-3 custom-shadow">
+                                                    <div class="table-info">
+                                                        <span class="table-label">Table:</span>
+                                                        <span class="table-value">{{ table.table_id }}</span>
+                                                    </div>
+                                                    <div class="table-info">
+                                                        <span class="table-label">Status:</span>
+                                                        <span class="table-value">{{ table.status }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <p>No available tables.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
                     <div class="custom-list-item p-5 wow fadeInUp" data-wow-delay="0.2s">
                         <h5 class="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
                         <h1 class="text-white mb-4">Book A Table Online</h1>
