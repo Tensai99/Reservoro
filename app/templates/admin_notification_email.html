@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>New Reservation</title>
+</head>
+<body>
+    <p>Hello Admin,</p>
+    <p>A new reservation has been made:</p>
+    <ul>
+        <li>User: {{ user.username }}</li>
+        <li>Phone Number: {{ user.phone_number }}</li>
+        <li>Date: {{ reservation.date }}</li>
+        <li>Time: {{ reservation.time }}</li>
+        <li>Number of Guests: {{ reservation.number_of_guests }}</li>
+        <li>Occasion: {{ reservation.occasion }}</li>
+    </ul>
+</body>
+</html>

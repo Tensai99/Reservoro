@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reservation Confirmation</title>
+</head>
+<body>
+    <h1 style="font-family: Arial, sans-serif; color: #007bff;">RESERVORO</h1>
+    <p>Dear {{ user.username }},</p>
+    <p>Your reservation details:</p>
+    <ul>
+        <li>Date: {{ reservation.date }}</li>
+        <li>Time: {{ reservation.time }}</li>
+        <li>Number of Guests: {{ reservation.number_of_guests }}</li>
+        <li>Occasion: {{ reservation.occasion }}</li>
+    </ul>
+    <p>Thank you for choosing our restaurant.</p>
+    <p>Best regards,<br>Reservoro</p>
+</body>
+</html>

@@ -4,9 +4,8 @@ from app import app, db, login_manager
 from app.forms import LoginForm, SignupForm, AddTableForm, ReservationForm, ProfileForm
 from app.models import User, RestaurantTable, Reservation
 from datetime import datetime, date
-from google.oauth2 import service_account
-import googleapiclient.discovery
-import base64
+from postmarker.core import PostmarkClient
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -156,33 +155,49 @@ def update_reservation_status():
 
     return redirect(url_for('admin_panel'))
 
-# Load service account credentials
-credentials = service_account.Credentials.from_service_account_file(
-    'app/reservoro-2a7952c8e0e3.json',
-    scopes=['https://www.googleapis.com/auth/gmail.send']
-)
 
-# Function to send confirmation email using Gmail API
-def send_confirmation_email(user_email, reservation_details):
-    # Create Gmail API client
-    service = googleapiclient.discovery.build('gmail', 'v1', credentials=credentials)
+# Route for sending confirmation email
+def send_confirmation_email(user, admin_email, reservation):
+    # Initialize Postmark client with your API token
+    client = PostmarkClient(server_token='0df544a6-d14a-4082-9819-f7f962f6887a')
 
-    # Prepare email content
-    message = f"Subject: Reservation Confirmation\n\nThank you for your reservation!\n\nReservation Details:\n{reservation_details}"
+    # Compose email content for user
+    user_email_content = render_template('user_confirmation_email.html',
+                                         user=user,
+                                         reservation=reservation)
 
-    # Encode the message
-    raw_message = base64.urlsafe_b64encode(message.encode()).decode()
+    # Compose email content for admin
+    admin_email_content = render_template('admin_notification_email.html',
+                                          user=user,
+                                          reservation=reservation)
 
-    # Send email
-    try:
-        sent_message = service.users().messages().send(
-            userId='me',
-            body={'raw': raw_message}
-        ).execute()
-        return sent_message
-    except Exception as e:
-        return str(e)
+    # Send emails
+    response_user = client.emails.send(
+        From='reservoro@tensaiverse.tech',
+        To=user.email,
+        Subject='Reservation Confirmation',
+        HtmlBody=user_email_content
+    )
 
+    response_admin = client.emails.send(
+        From='reservoro@tensaiverse.tech',
+        To=admin_email,
+        Subject='New Reservation',
+        HtmlBody=admin_email_content
+    )
+
+    # Check response status
+    if response_user.get('ErrorCode') is None:
+        app.logger.info(f"Email confirmation sent to {user.email}")
+    else:
+        app.logger.error(f"Failed to send email confirmation to {user.email}. Error: {response_user}")
+
+    if response_admin.get('ErrorCode') is None:
+        app.logger.info(f"Email notification sent to admin")
+    else:
+        app.logger.error(f"Failed to send email notification to admin. Error: {response_admin}")
+
+# Modify your route function to pass admin email to send_confirmation_email
 @app.route('/make_reservation', methods=['GET', 'POST'])
 @login_required
 def make_reservation():
@@ -224,14 +239,14 @@ def make_reservation():
                     db.session.add(reservation)
                     db.session.commit()
 
-                    # Send confirmation email
-                    try:
-                        send_confirmation_email(current_user.email, reservation)
-                        flash('Reservation made successfully. Confirmation email sent.', 'success')
-                        return redirect(url_for('make_reservation'))
-                    except Exception as e:
-                        flash(f'Error sending confirmation email: {str(e)}', 'danger')
-                        return redirect(url_for('make_reservation'))
+                    # Send confirmation email to user and notification to admin
+                    admin_email = User.query.filter_by(is_admin=True).first().email
+                    send_confirmation_email(current_user, admin_email, reservation)
+
+                    flash('Reservation confirmed. A confirmation email has been sent.', 'success')
+
+                    return redirect(url_for('make_reservation'))
+
             else:
                 table.status = 'Reserved'
                 db.session.commit()
@@ -247,14 +262,14 @@ def make_reservation():
                 db.session.add(reservation)
                 db.session.commit()
 
-                # Send confirmation email
-                try:
-                    send_confirmation_email(current_user.email, reservation)
-                    flash('Reservation made successfully. Confirmation email sent.', 'success')
-                    return redirect(url_for('make_reservation'))
-                except Exception as e:
-                    flash(f'Error sending confirmation email: {str(e)}', 'danger')
-                    return redirect(url_for('make_reservation'))
+                # Send confirmation email to user and notification to admin
+                admin_email = User.query.filter_by(is_admin=True).first().email
+                send_confirmation_email(current_user, admin_email, reservation)
+
+                flash('Reservation confirmed. A confirmation email has been sent.', 'success')
+
+                return redirect(url_for('make_reservation'))
+
         else:
             flash('Table not found.', 'danger')
 

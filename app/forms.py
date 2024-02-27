@@ -16,7 +16,6 @@ class SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match')])
     phone_number = StringField('Phone Number', validators=[DataRequired()])
-    submit = SubmitField('Sign Up')
 
     def validate_username(self, field):
         if User.query.filter_by(username=field.data).first():
@@ -28,8 +27,12 @@ class SignupForm(FlaskForm):
 
     def validate_phone_number(self, field):
         if field.data:  # Check if phone number is provided
-            # Add any additional phone number validation if needed
-            pass
+            user = User.query.filter_by(phone_number=field.data).first()
+            if user:
+                raise ValidationError('Phone number is already registered.')
+            # You can also implement additional validation here if needed
+
+    submit = SubmitField('Sign Up')
 
 
 class AddTableForm(FlaskForm):

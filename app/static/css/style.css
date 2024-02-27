@@ -477,3 +477,88 @@
     padding-right: 0;
     border-right: none;
 }
+
+.custom-shadow {
+    box-shadow: 
+        0 8px 12px -2px rgba(0, 0, 139, 0.8),
+        0 4px 8px -2px rgba(255, 255, 0, 0.5);
+}
+
+/* Css for make_reservation*/
+.custom-block {
+    background-color: white;
+    box-shadow: 5px 5px 5px rgba(255, 173, 102, 0.8), -5px 5px 5px rgba(255, 173, 102, 0.8); /* Adjust the values as needed */
+    padding: 25px; /* Adjust the padding to control the size of the block */
+    border-radius: 50%; /* Make the block a circle */
+    width: 180px; /* Adjust the width of the circle */
+    height: 180px; /* Adjust the height of the circle */
+    text-align: center;
+}
+
+.custom-block h5,
+.custom-block small {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 14px; /* Adjust the font size to fit inside the circle */
+}
+
+.custom-cancel-btn {
+    background-color: #FEA116;
+    border-color: #FEA116;
+    border-radius: 20px; /* Make the cancel button oval */
+    width: 80px; /* Adjust the width of the cancel button */
+    height: 30px; /* Adjust the height of the cancel button */
+    font-size: 12px; /* Adjust the font size of the cancel button */
+}
+
+.custom-list-item {
+    background-color: #0F172B; /* Dark background color */
+    border-radius: 20px; /* Make the div oval */
+    padding: 20px; /* Adjust padding as needed */
+}
+
+/* Css for admin_panel*/
+.bold-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:
+            5px 5px 5px rgba(255, 173, 102, 0.8), -5px 5px 5px rgba(255, 173, 102, 0.8); /* Orange shadow */
+}
+
+.bold-table th,
+.bold-table td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.bold-table th:last-child,
+.bold-table td:last-child {
+    border-right: none;
+}
+
+.bold-table th {
+    background-color: #e3e3e3;
+    border-bottom: 2px solid #ccc;
+}
+
+.bold-table td {
+    position: relative;
+}
+
+.bold-table td:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.2), transparent);
+}

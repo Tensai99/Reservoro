@@ -35,62 +35,68 @@
 </head>
 
 <body>
-    <div class="container-xxl bg-white p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
-        <!-- Spinner End -->
+    </div>
+    <!-- Spinner End -->
 
 
-        <!-- Navbar & Hero Start -->
-        <div class="container-xxl position-relative p-0">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
-                <a href="" class="navbar-brand p-0">
-                    <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Reservoro</h1>
-                    <!-- <img src="img/logo.png" alt="Logo"> -->
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <div class="navbar-nav ms-auto py-0 pe-4">
-                        <a href="{{ url_for('index') }}" class="nav-item nav-link active">Home</a>
-                        <a href="{{ url_for('about') }}" class="nav-item nav-link">About</a>
-                        <a href="{{ url_for('service') }}" class="nav-item nav-link">Service</a>
-                        <a href="{{ url_for('menu') }}" class="nav-item nav-link">Menu</a>
-                        <a href="{{ url_for('contact') }}" class="nav-item nav-link">Contact</a>
-                        <div class="nav-item dropdown">
-                            <a href="{{ url_for('profile') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle"></i> <!-- Icon for profile -->
-                              </a>
-                            <div class="dropdown-menu m-0">
-                                
-                                <a href="{{ url_for('logout') }}" class="btn btn-primary py-2 px-4">Logout</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            <div class="container-xxl py-5 bg-dark hero-header mb-5">
-                <div class="container my-5 py-5">
-                    <div class="row align-items-center g-5">
-                        <div class="col-lg-6 text-center text-lg-start">
-                            <h1 class="display-3 text-white animated slideInLeft">Enjoy Our<br>Delicious Meal</h1>
-                            <p class="text-white animated slideInLeft mb-4 pb-2">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita duo justo magna dolore erat amet</p>
-                        </div>
-                        <div class="col-lg-6 text-center text-lg-end overflow-hidden">
-                            <img class="img-fluid" src="{{ url_for('static', filename='img/hero.png') }}" alt="">
-
+    <!-- Navbar & Hero Start -->
+    <div class="p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 px-lg-5 py-3 py-lg-0">
+            <a href="" class="navbar-brand p-0">
+                <h1 class="text-primary m-0"><i class="fa fa-utensils me-3"></i>Reservoro</h1>
+                <!-- <img src="img/logo.png" alt="Logo"> -->
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0 pe-4">
+                    <a href="{{ url_for('index') }}" class="nav-item nav-link active">Home</a>
+                    <a href="{{ url_for('about') }}" class="nav-item nav-link">About</a>
+                    <a href="{{ url_for('service') }}" class="nav-item nav-link">Service</a>
+                    <a href="{{ url_for('menu') }}" class="nav-item nav-link">Menu</a>
+                   
+                    <a href="{{ url_for('contact') }}" class="nav-item nav-link">Contact</a>
+                    <div class="nav-item dropdown">
+                        <a href="{{ url_for('profile') }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle"></i> <!-- Icon for profile -->
+                          </a>
+                        <div class="dropdown-menu m-0">
+                            
+                            <a href="{{ url_for('logout') }}" class="btn btn-primary py-2 px-4">Logout</a>
                         </div>
                     </div>
                 </div>
             </div>
+        </nav>
+
+        <div class="py-5 bg-dark hero-header p-5 mb-5">
+            <div class="my-5 py-5">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-6 text-center text-lg-start">
+                        <h1 class="display-3 text-white animated slideInLeft">Enjoy Our<br>Delicious Meal</h1>
+                        <p class="text-white animated slideInLeft mb-4 pb-2">Feel free to book a table for your special occasion and check out our food menu</p>
+                        {% if logged_in %}
+                        <a href="/make_reservation" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Book A Table</a>
+                        {% else %}
+                        <a href="/login" class="btn btn-primary py-sm-3 px-sm-5 me-3 animated slideInLeft">Book A Table</a>
+                        {% endif %}
+
+                    </div>
+                    <div class="col-lg-6 text-center text-lg-end overflow-hidden">
+                        <img class="img-fluid" src="{{ url_for('static', filename='img/hero.png') }}" alt="">
+
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Navbar & Hero End -->
+    </div>
+    <!-- Navbar & Hero End -->
 
 <!-- Reservation Start -->
         <div class="container-xxl py-5 px-0 wow fadeInUp" data-wow-delay="0.1s">
@@ -109,41 +115,40 @@
                     <div class="table-list">
                         <h3>Available Tables:</h3>
                         {% if tables %}
-                            {% for table in tables %}
-                                <div class="table-item">
-                                    <div class="table-info">
-                                        <span class="table-label">Table:</span>
-                                        <span class="table-value">{{ table.table_id }}</span>
-                                    </div>
-                    
-                                    <div class="table-info">
-                                        <span class="table-label">Status:</span>
-                                        <span class="table-value">{{ table.status }}</span>
-                                    </div>
-                    
-                                    {% if table.status == 'Reserved' %}
-                                        <div class="table-info">
-                                            <span class="table-label">Date Reserved:</span>
-                                            <span class="table-value">{{ table.reservations[0].date }}</span>
+                            <div class="row">
+                                {% for table in tables %}
+                                    <div class="col-md-6` mb-4">
+                                        <div class="table-item border rounded p-3 custom-shadow">
+                                            <div class="table-info">
+                                                <span class="table-label">Table:</span>
+                                                <span class="table-value">{{ table.table_id }}</span>
+                                            </div>
+                                            <div class="table-info">
+                                                <span class="table-label">Status:</span>
+                                                <span class="table-value">{{ table.status }}</span>
+                                            </div>
+                                            {% if table.status == 'Reserved' %}
+                                                <div class="table-info">
+                                                    <span class="table-label">Date Reserved:</span>
+                                                    <span class="table-value">{{ table.reservations[0].date }}</span>
+                                                </div>
+                                                <div class="table-info">
+                                                    <span class="table-label">Time Reserved:</span>
+                                                    <span class="table-value">{{ table.reservations[0].time }}</span>
+                                                </div>
+                                            {% endif %}
                                         </div>
-                    
-                                        <div class="table-info">
-                                            <span class="table-label">Time Reserved:</span>
-                                            <span class="table-value">{{ table.reservations[0].time }}</span>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
                         {% else %}
                             <p>No tables available.</p>
                         {% endif %}
-                    </div>                    
+                    </div>                
                 </div>
-                <div class="col-md-6 bg-dark d-flex align-items-center">
-
-                    <div class="p-5 wow fadeInUp" data-wow-delay="0.2s">
+                <div class="col-md-6 d-flex align-items-center">
+                    <div class="custom-list-item p-5 wow fadeInUp" data-wow-delay="0.2s">
                         <h5 class="section-title ff-secondary text-start text-primary fw-normal">Reservation</h5>
-                    
                         <h1 class="text-white mb-4">Book A Table Online</h1>
                         <form method="POST" action="{{ url_for('make_reservation') }}">
                             {{ form.csrf_token }}
@@ -168,15 +173,15 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        {{ form.occasion(class="form-control", placeholder="Occasion") }}
-                                        {{ form.occasion.label(class="form-label") }}
+                                        <textarea class="form-control" id="occasion" name="occasion" placeholder="Occasion and special requests" rows="3" required></textarea>
+                                        <label for="occasion">Occasion and special requests</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <button class="btn btn-primary w-100 py-3" type="submit">Reserve</button>
                                 </div>
                             </div>
-                        </form>                        
+                        </form>
                     </div>
                 </div>
             </div>
@@ -197,8 +202,8 @@
                         <div id="tab-1" class="tab-pane fade show p-0 active">
                             <div class="row g-4">
                                 {% for reservation in current_user.reservations %}
-                                    <div class="col-lg-6">
-                                        <div class="d-flex align-items-center">
+                                    <div class="col-lg-3">
+                                        <div class="d-flex align-items-center justify-content-center custom-block">
                                             <div class="w-100 d-flex flex-column text-start ps-4">
                                                 <h5 class="d-flex justify-content-between border-bottom pb-2">
                                                     <span>{{ reservation.table.table_id }}</span>
@@ -211,7 +216,7 @@
                                                     Time: {{ reservation.time }}<br>
                                                     <form method="POST" action="{{ url_for('cancel_reservation', reservation_id=reservation.reservation_id) }}">
                                                         {{ form.csrf_token }}
-                                                        <button type="submit" class="btn btn-danger">Cancel Reservation</button>
+                                                        <button type="submit" class="btn btn-danger custom-cancel-btn">Cancel</button>
                                                     </form>
                                                 </small>
                                             </div>
@@ -271,75 +276,6 @@
     </div>
 </div>
 <!-- Service End -->
-
-        <!-- Team Start -->
-        <!--<div class="container-xxl pt-5 pb-3">
-            <div class="container">
-                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h5 class="section-title ff-secondary text-center text-primary fw-normal">Team Members</h5>
-                    <h1 class="mb-5">Our Master Chefs</h1>
-                </div>
-                <div class="row g-4">
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="team-item text-center rounded overflow-hidden">
-                            <div class="rounded-circle overflow-hidden m-4">
-                                <img class="img-fluid" src="img/team-1.jpg" alt="">
-                            </div>
-                            <h5 class="mb-0">Full Name</h5>
-                            <small>Designation</small>
-                            <div class="d-flex justify-content-center mt-3">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                        <div class="team-item text-center rounded overflow-hidden">
-                            <div class="rounded-circle overflow-hidden m-4">
-                                <img class="img-fluid" src="img/team-2.jpg" alt="">
-                            </div>
-                            <h5 class="mb-0">Full Name</h5>
-                            <small>Designation</small>
-                            <div class="d-flex justify-content-center mt-3">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                        <div class="team-item text-center rounded overflow-hidden">
-                            <div class="rounded-circle overflow-hidden m-4">
-                                <img class="img-fluid" src="img/team-3.jpg" alt="">
-                            </div>
-                            <h5 class="mb-0">Full Name</h5>
-                            <small>Designation</small>
-                            <div class="d-flex justify-content-center mt-3">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.7s">
-                        <div class="team-item text-center rounded overflow-hidden">
-                            <div class="rounded-circle overflow-hidden m-4">
-                                <img class="img-fluid" src="img/team-4.jpg" alt="">
-                            </div>
-                            <h5 class="mb-0">Full Name</h5>
-                            <small>Designation</small>
-                            <div class="d-flex justify-content-center mt-3">
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square btn-primary mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <!-- Team End -->
 
 
         <!-- Testimonial Start -->

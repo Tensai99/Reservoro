@@ -1,7 +1,7 @@
 from app import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-import phonenumbers
+import re
 
 class User(UserMixin, db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -25,15 +25,12 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return str(self.user_id)
 
-    def validate_phone_number(self, phone):
-        # No country code validation needed
-        return phone
-
     def set_phone_number(self, phone):
-        try:
-            self.phone_number = self.validate_phone_number(phone)
-        except ValueError as e:
-            raise ValueError(str(e))
+        phone_pattern = re.compile(r'^\+\d{1,3}\d{9,15}$')  # Assuming country code followed by 9-15 digits
+        if not phone_pattern.match(phone):
+            raise ValueError("Invalid phone number format. It should start with a '+' followed by country code and then the phone number.")
+        
+        self.phone_number = phone
 
 class RestaurantTable(db.Model):
     table_id = db.Column(db.Integer, primary_key=True)
