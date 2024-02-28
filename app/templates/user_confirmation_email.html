@@ -59,6 +59,7 @@
                 <span>{{ reservation.occasion }}</span>
             </div>
         </div>
+        <p>If you want to cancel the reservation, <a href="{{ url_for('cancel_reservation', reservation_id=reservation.reservation_id, _external=True) }}">click here</a>.</p>
         <p>Thank you for choosing our restaurant.</p>
         <p>Best regards,<br>Reservoro</p>
     </div>

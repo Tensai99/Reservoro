@@ -10,5 +10,4 @@ Flask-Mail
 mysqlclient
 mysql-connector-python
 phonenumbers
-email_validator
 postmarker

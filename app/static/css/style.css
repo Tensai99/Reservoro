@@ -478,15 +478,22 @@
     border-right: none;
 }
 
+/* reseverd and available tables*/
 .custom-shadow {
+    width: 250px; /* Adjust width as needed */
+    min-height: 250px; /* Adjust minimum height as needed */
+    position: relative;
+    background: #f5ebe4b9; /* Adjust background color as needed */
+    border-radius: 20px; /* Adjust border radius as needed */
     box-shadow: 
         0 8px 12px -2px rgba(0, 0, 139, 0.8),
         0 4px 8px -2px rgba(255, 255, 0, 0.5);
+    overflow: hidden; /* Hide overflowing content */
 }
 
 /* Css for make_reservation*/
 .custom-block {
-    background-color: white;
+    background-color: #f5ebe4b9;
     box-shadow: 5px 5px 5px rgba(255, 173, 102, 0.8), -5px 5px 5px rgba(255, 173, 102, 0.8); /* Adjust the values as needed */
     padding: 25px; /* Adjust the padding to control the size of the block */
     border-radius: 50%; /* Make the block a circle */

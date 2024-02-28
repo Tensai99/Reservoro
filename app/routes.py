@@ -284,33 +284,38 @@ def make_reservation():
     return render_template('make_reservation.html', form=form, tables=tables, reservations=reservations, current_date=current_date)
 
 
-@app.route('/cancel_reservation/<int:reservation_id>', methods=['POST'])
+@app.route('/cancel_reservation/<int:reservation_id>', methods=['GET', 'POST'])
 @login_required
 def cancel_reservation(reservation_id):
-    reservation = Reservation.query.get(reservation_id)
-    
-    if reservation:
-        # Check if the reservation belongs to the current user
-        if reservation.user_id == current_user.user_id:
-            # Update the table status to "Available"
-            table = reservation.table
-            table.status = "Available"
-            db.session.commit()
+    if request.method == 'POST':
+        reservation = Reservation.query.get(reservation_id)
+        
+        if reservation:
+            # Check if the reservation belongs to the current user
+            if reservation.user_id == current_user.user_id:
+                # Update the table status to "Available"
+                table = reservation.table
+                table.status = "Available"
+                db.session.commit()
 
-            # Delete the reservation from the database
-            db.session.delete(reservation)
-            db.session.commit()
-            
-            # Send cancellation notification email to admin
-            admin_email = User.query.filter_by(is_admin=True).first().email
-            send_cancellation_notification(current_user, admin_email, reservation)
-            
-            flash('Reservation canceled successfully.', 'success')
+                # Delete the reservation from the database
+                db.session.delete(reservation)
+                db.session.commit()
+                
+                # Send cancellation notification email to admin
+                admin_email = User.query.filter_by(is_admin=True).first().email
+                send_cancellation_notification(current_user, admin_email, reservation)
+                
+                flash('Reservation canceled successfully.', 'success')
+                return redirect(url_for('make_reservation'))
+            else:
+                flash('You are not authorized to cancel this reservation.', 'error')
         else:
-            flash('You are not authorized to cancel this reservation.', 'error')
-    else:
-        flash('Reservation not found.', 'error')
-    
+            flash('Reservation not found.', 'error')
+
+    # Handle GET request (if needed)
+    # You can render a confirmation page or perform other actions
+    # For now, let's redirect to the make_reservation page
     return redirect(url_for('make_reservation'))
 
 
